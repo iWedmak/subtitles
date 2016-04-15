@@ -97,14 +97,14 @@ class Reader
      */
     protected static function scanBlocksIntoFile(File $srt_file, array $blocks)
     {
-        foreach ($blocks as $block)
+        foreach ($blocks as $n=>$block)
         {
             if (trim($block) === "")
             {
                 continue;
             }
 
-            $srt_file->addSubtitle(self::createSubtitleFromBlock($block));
+            $srt_file->addSubtitle(self::createSubtitleFromBlock($block,$n+1));
         }
     }
 
@@ -112,12 +112,12 @@ class Reader
      * @param string $block
      * @return Subtitle
      */
-    protected static function createSubtitleFromBlock($block)
+    protected static function createSubtitleFromBlock($block, $n)
     {
         $matches = self::matchBlockToRegex($block);
 
         $subtitle = new Subtitle();
-        $subtitle->number = trim($matches[1]);
+        $subtitle->number = $n;
         $subtitle->start_time = Time::fromString($matches[2]);
         $subtitle->stop_time = Time::fromString($matches[3]);
         $subtitle->text = trim($matches[4]);
